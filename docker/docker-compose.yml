@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: badmintoz-db
+    ports:
+      - "5432:5432"  # Maps localhost port 5432 to container port 5432
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=badmintoz_auth
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - badmintoz-net
+
+volumes:
+  postgres_data: # Persists data so you don't lose it when you restart Docker
+
+networks:
+  badmintoz-net:
+    driver: bridge
