@@ -26,7 +26,7 @@ const SlotsPage = () => {
       const token = localStorage.getItem("token");
       try {
         const response = await axios.get(
-          `http://localhost:8081/api/courts/${courtId}/timeslots?date=${date}`,
+          `http://localhost:8082/api/courts/${courtId}/timeslots?date=${date}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setSlots(response.data);
@@ -47,7 +47,7 @@ const SlotsPage = () => {
 
     try {
       await axios.post(
-        `http://localhost:8081/api/courts/timeslots/${slotId}/book`,
+        `http://localhost:8082/api/courts/timeslots/${slotId}/book`,
         {}, // Empty body
         { headers: { Authorization: `Bearer ${token}` } }
       );

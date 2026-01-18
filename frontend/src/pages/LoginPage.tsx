@@ -14,7 +14,7 @@ const LoginPage = () => {
 
     try {
       // 1. Send Request to Auth Service (Port 8080)
-      const response = await axios.post("http://localhost:8080/api/auth/login", {
+      const response = await axios.post("http://localhost:8082/api/auth/login", {
         email: email,
         password: password
       });

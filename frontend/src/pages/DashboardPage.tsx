@@ -27,7 +27,7 @@ const DashboardPage = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:8081/api/courts", {
+        const response = await axios.get("http://localhost:8082/api/courts", {
           headers: {
             Authorization: `Bearer ${token}` // <--- We must attach the Passport!
           }
