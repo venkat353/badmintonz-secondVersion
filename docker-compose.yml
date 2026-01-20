@@ -14,7 +14,7 @@ services:
 
   # 2. Service Registry (The Phonebook)
   service-registry:
-    image: badmintoz-registry:latest
+    image: venkatp353/badmintoz-registry:latest
     container_name: service-registry
     ports:
       - "8761:8761"
@@ -23,7 +23,7 @@ services:
 
   # 3. Auth Service
   auth-service:
-    image: badmintoz-auth:latest
+    image: venkatp353/badmintoz-auth:latest
     container_name: auth-service
     ports:
       - "8080:8080"
@@ -38,7 +38,7 @@ services:
 
   # 4. Court Service
   court-service:
-    image: badmintoz-court:latest
+    image: venkatp353/badmintoz-court:latest
     container_name: court-service
     ports:
       - "8081:8081"
@@ -51,7 +51,7 @@ services:
 
   # 5. API Gateway (The Door)
   api-gateway:
-    image: badmintoz-gateway:latest
+    image: venkatp353/badmintoz-gateway:latest
     container_name: api-gateway
     ports:
       - "8082:8082"
@@ -64,7 +64,7 @@ services:
 
   # 6. Frontend (The UI)
   frontend:
-    image: badmintoz-frontend:latest
+    image: venkatp353/badmintoz-frontend:latest
     container_name: frontend-ui
     ports:
       - "5173:5173"
