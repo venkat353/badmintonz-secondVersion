@@ -28,7 +28,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 //                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().authenticated() // LOCK EVERYTHING. No public access.
+                        // Allow public API endpoints AND Swagger Docs
+                        .requestMatchers(
+                                "/api/courts/public/**", // (If you have public endpoints)
+                                "/v3/api-docs/**",       // <--- Swagger JSON
+                                "/swagger-ui/**",        // <--- Swagger UI HTML
+                                "/swagger-ui.html"
+                        ).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

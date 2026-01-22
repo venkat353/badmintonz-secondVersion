@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-// Define what a Court looks like (TypeScript Interface)
 interface Court {
   id: number;
   name: string;
@@ -20,16 +19,16 @@ const DashboardPage = () => {
     const fetchCourts = async () => {
       const token = localStorage.getItem("token");
 
-      // If no token, kick them back to login
       if (!token) {
         navigate("/login");
         return;
       }
 
       try {
-        const response = await axios.get("http://localhost:8082/api/courts", {
+        // --- FIX: Change Port 8082 -> 8222 (Gateway) ---
+        const response = await axios.get("http://localhost:8222/api/courts", {
           headers: {
-            Authorization: `Bearer ${token}` // <--- We must attach the Passport!
+            Authorization: `Bearer ${token}`
           }
         });
         setCourts(response.data);
@@ -44,7 +43,6 @@ const DashboardPage = () => {
     fetchCourts();
   }, [navigate]);
 
-  // Handle Logout
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
@@ -64,6 +62,13 @@ const DashboardPage = () => {
             Logout
           </button>
         </div>
+        
+        <button 
+          onClick={() => navigate("/my-bookings")}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
+        >
+          My Bookings
+        </button>
 
         {error && <div className="text-red-500 mb-4">{error}</div>}
 
@@ -75,7 +80,7 @@ const DashboardPage = () => {
               <p className="text-gray-600">Price: <span className="font-semibold">${court.pricePerHour}/hr</span></p>
               
               <button 
-                onClick={() => navigate(`/court/${court.id}/slots`)} // Navigate to the new page
+                onClick={() => navigate(`/court/${court.id}/slots`)} 
                 className="mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
                 >
                 View Slots

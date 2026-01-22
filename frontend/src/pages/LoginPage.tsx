@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios"; // Import Axios
-import { useNavigate } from "react-router-dom"; // Import Navigation hook
+import { Link, useNavigate } from "react-router-dom"; // Import Navigation hook
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -13,8 +13,9 @@ const LoginPage = () => {
     setError(""); // Clear previous errors
 
     try {
-      // 1. Send Request to Auth Service (Port 8080)
-      const response = await axios.post("http://localhost:8082/api/auth/login", {
+      // 1. Send Request to API Gateway (Port 8222)
+      // NOTE: Changed 8082 -> 8222 to match your Docker Gateway
+      const response = await axios.post("http://localhost:8222/api/auth/login", {
         email: email,
         password: password
       });
@@ -28,7 +29,14 @@ const LoginPage = () => {
 
     } catch (err: any) {
       console.error("Login Failed:", err);
-      setError("Invalid email or password!");
+      // specific error message handling
+      if (err.response) {
+         setError(err.response.data || "Invalid credentials");
+      } else if (err.request) {
+         setError("Network error. Is the backend running?");
+      } else {
+         setError("An unexpected error occurred.");
+      }
     }
   };
 
@@ -47,8 +55,7 @@ const LoginPage = () => {
         )}
         
         <form onSubmit={handleLogin} className="space-y-4">
-            {/* ... (Keep the rest of the form exactly the same as before) ... */}
-            <div>
+          <div>
             <label className="block text-sm font-medium text-gray-700">Email</label>
             <input
               type="email"
@@ -79,9 +86,13 @@ const LoginPage = () => {
             Sign In
           </button>
         </form>
-        {/* ... (Keep the footer text) ... */}
-        <p className="mt-4 text-sm text-center text-gray-600">
-          Don't have an account? <span className="text-blue-500 cursor-pointer">Register</span>
+
+        {/* Register Link Section */}
+        <p className="mt-4 text-center text-sm text-gray-600">
+          Don't have an account?{' '}
+          <Link to="/register" className="text-blue-500 hover:underline">
+            Register
+          </Link>
         </p>
       </div>
     </div>

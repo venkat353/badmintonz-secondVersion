@@ -59,4 +59,9 @@ public class CourtController {
         // Principal.getName() returns the email because we set it in the JWT Filter
         return ResponseEntity.ok(courtService.bookTimeslot(id, principal.getName()));
     }
+    @GetMapping("/my-bookings")
+    public ResponseEntity<List<Timeslot>> getMyBookings(Principal principal) {
+        // principal.getName() is the email from the Token
+        return ResponseEntity.ok(courtService.getUserBookings(principal.getName()));
+    }
 }

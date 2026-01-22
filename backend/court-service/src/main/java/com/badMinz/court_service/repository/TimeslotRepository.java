@@ -16,4 +16,6 @@ public interface TimeslotRepository extends JpaRepository<Timeslot, Long> {
 
     // Find slots within a specific date range (e.g., Jan 12th 00:00 to Jan 12th 23:59)
     List<Timeslot> findByCourtIdAndStartTimeBetween(Long courtId, LocalDateTime start, LocalDateTime end);
+    // NEW: Find all slots booked by a specific email
+    List<Timeslot> findByReservedBy(String email);
 }

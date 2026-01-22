@@ -84,4 +84,7 @@ public class CourtService {
 
         return timeslotRepository.save(timeslot);
     }
+    public List<Timeslot> getUserBookings(String email) {
+        return timeslotRepository.findByReservedBy(email);
+    }
 }

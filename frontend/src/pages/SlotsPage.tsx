@@ -6,7 +6,7 @@ interface Timeslot {
   id: number;
   startTime: string; // ISO String "2026-02-01T10:00:00"
   endTime: string;
-  booked: boolean; // Note: In JSON it might be "booked" or "isBooked" depending on Lombok. Let's check.
+  booked: boolean; 
 }
 
 const SlotsPage = () => {
@@ -19,14 +19,15 @@ const SlotsPage = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Fetch Slots when Date changes
+  // Fetch Slots when Date or CourtId changes
   useEffect(() => {
     const fetchSlots = async () => {
       setLoading(true);
       const token = localStorage.getItem("token");
       try {
+        // --- FIX 1: Use Gateway Port 8222 ---
         const response = await axios.get(
-          `http://localhost:8082/api/courts/${courtId}/timeslots?date=${date}`,
+          `http://localhost:8222/api/courts/${courtId}/timeslots?date=${date}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setSlots(response.data);
@@ -41,21 +42,25 @@ const SlotsPage = () => {
   }, [courtId, date]);
 
   // Handle Booking
-  const handleBook = async (slotId: number) => {
+ const handleBook = async (slotId: number) => {
     const token = localStorage.getItem("token");
     if (!confirm("Are you sure you want to book this slot?")) return;
 
     try {
+      // --- FIX: Added "/timeslots/" to match CourtController.java ---
       await axios.post(
-        `http://localhost:8082/api/courts/timeslots/${slotId}/book`,
+        `http://localhost:8222/api/courts/timeslots/${slotId}/book`,
         {}, // Empty body
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      
       setMessage("Booking Successful! 🎉");
-      // Refresh slots to show it as booked
+      
+      // Update the UI immediately to show it as booked
       setSlots(slots.map(s => s.id === slotId ? { ...s, booked: true } : s));
     } catch (err) {
-      alert("Booking Failed! Slot might be taken.");
+      console.error(err);
+      alert("Booking Failed! Slot might be taken or session expired.");
     }
   };
 
@@ -77,6 +82,9 @@ const SlotsPage = () => {
             onChange={(e) => setDate(e.target.value)}
             className="border p-2 rounded w-full"
           />
+          <p className="text-sm text-gray-500 mt-1">
+            * We created mock data for <strong>Tomorrow</strong>. Select the next day to see slots!
+          </p>
         </div>
 
         {message && <div className="bg-green-100 text-green-700 p-3 rounded mb-4">{message}</div>}

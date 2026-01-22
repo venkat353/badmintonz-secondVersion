@@ -28,9 +28,9 @@ public class Timeslot {
     private boolean isBooked = false; // Initially available
 
     // RELATIONSHIP
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "court_id", nullable = false)
-    @JsonIgnore // Prevent infinite recursion in JSON (Court -> Timeslots -> Court...)
+//    @JsonIgnore // Prevent infinite recursion in JSON (Court -> Timeslots -> Court...)
     private Court court;
 
     @Column(name = "reserved_by")

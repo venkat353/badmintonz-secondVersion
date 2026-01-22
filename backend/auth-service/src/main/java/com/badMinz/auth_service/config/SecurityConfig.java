@@ -29,7 +29,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 //                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**",
+                                "/v3/api-docs/**",       // <--- Swagger JSON
+                                "/swagger-ui/**",        // <--- Swagger UI HTML
+                                "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
                 )
                 // Add this: No Sessions!

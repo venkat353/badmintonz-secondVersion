@@ -1,76 +1,91 @@
 services:
-  # 1. Database (We create a fresh DB inside Docker)
+  # 1. Database
   postgres:
-    image: postgres:15-alpine
-    container_name: postgres-db
+    image: postgres:15
+    container_name: badmintoz-db
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: badmintoz
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: badmintoz_db
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-  # 2. Service Registry (The Phonebook)
+  # 2. Service Registry
   service-registry:
     image: venkatp353/badmintoz-registry:latest
     container_name: service-registry
     ports:
       - "8761:8761"
-    depends_on:
-      - postgres
+    environment:
+      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=false
+      - EUREKA_CLIENT_FETCH_REGISTRY=false
 
   # 3. Auth Service
   auth-service:
     image: venkatp353/badmintoz-auth:latest
     container_name: auth-service
-    ports:
-      - "8080:8080"
     environment:
-      # Override the DB URL to point to the 'postgres' container defined above
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/badmintoz
-      # Override Eureka URL to point to 'service-registry' container
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/badmintoz_auth
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SERVER_PORT=8080
+    ports:
+      - "8081:8080" # Host Port 8081 -> Container 8080
     depends_on:
-      - service-registry
-      - postgres
+      postgres:
+        condition: service_healthy
+      service-registry:
+        condition: service_started
 
   # 4. Court Service
   court-service:
     image: venkatp353/badmintoz-court:latest
     container_name: court-service
-    ports:
-      - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/badmintoz
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/badmintoz_court
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SERVER_PORT=8080
+    ports:
+      - "8082:8080" # Host Port 8082 -> Container 8080
     depends_on:
-      - service-registry
-      - postgres
+      postgres:
+        condition: service_healthy
+      service-registry:
+        condition: service_started
 
-  # 5. API Gateway (The Door)
+  # 5. API Gateway
   api-gateway:
     image: venkatp353/badmintoz-gateway:latest
     container_name: api-gateway
-    ports:
-      - "8082:8082"
     environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SERVER_PORT=8222
+    ports:
+      - "8222:8222" # Host Port 8222 -> Container 8222
     depends_on:
       - service-registry
       - auth-service
       - court-service
 
-  # 6. Frontend (The UI)
+  # 6. Frontend
   frontend:
     image: venkatp353/badmintoz-frontend:latest
     container_name: frontend-ui
     ports:
       - "5173:5173"
-    depends_on:
-      - api-gateway
+    environment:
+      - VITE_API_URL=http://localhost:8222
 
-# Define the storage volume for the DB so data persists
 volumes:
   postgres_data:
