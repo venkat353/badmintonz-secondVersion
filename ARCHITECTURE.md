@@ -16,3 +16,4 @@ graph TD
         Auth -.->|Register| Eureka
         Court -.->|Register| Eureka
     end
+```
