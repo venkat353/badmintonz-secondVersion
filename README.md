@@ -47,7 +47,7 @@ The system follows a microservices pattern with a centralized API Gateway and Se
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/YOUR_USERNAME/badmintoz-monorepo.git](https://github.com/YOUR_USERNAME/badmintoz-monorepo.git)
+git clone [https://github.com/venkat353/badmintoz-monorepo.git](https://github.com/venkat353/badmintoz-monorepo.git)
 cd badmintoz-monorepo
 ```
 
