@@ -28,6 +28,20 @@ services:
       - EUREKA_CLIENT_REGISTER_WITH_EUREKA=false
       - EUREKA_CLIENT_FETCH_REGISTRY=false
 
+
+  notification-service:
+    image: venkatp353/badmintoz-notification:latest
+    container_name: notification-service
+    ports:
+      - "8083:8083"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SPRING_MAIL_USERNAME=YOUR_REAL_EMAIL@gmail.com   # Optional for now
+      - SPRING_MAIL_PASSWORD=YOUR_APP_PASSWORD           # Optional for now
+    depends_on:
+      - service-registry
+
+
   # 3. Auth Service
   auth-service:
     image: venkatp353/badmintoz-auth:latest

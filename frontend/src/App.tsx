@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import DashboardPage from "./pages/DashboardPage";
 import SlotsPage from "./pages/SlotsPage";
 import MyBookingsPage from "./pages/MyBookingsPage"; // <--- 1. Check Import
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
         <Route path="/court/:courtId/slots" element={<SlotsPage />} />
 
         {/* --- 2. THIS IS THE MISSING ROUTE --- */}
-        <Route path="/my-bookings" element={<MyBookingsPage />} /> 
+        <Route path="/my-bookings" element={<MyBookingsPage />} />
+        <Route path="/admin" element={<AdminDashboard />} />
         
       </Routes>
     </Router>

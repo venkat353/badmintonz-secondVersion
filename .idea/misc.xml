@@ -8,6 +8,7 @@
         <option value="$PROJECT_DIR$/backend/court-service/pom.xml" />
         <option value="$PROJECT_DIR$/backend/service-registry/pom.xml" />
         <option value="$PROJECT_DIR$/backend/api-gateway/api-gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/notification-service/pom.xml" />
       </list>
     </option>
   </component>

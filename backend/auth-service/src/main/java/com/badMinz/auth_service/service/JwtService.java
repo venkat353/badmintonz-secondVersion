@@ -20,9 +20,11 @@ public class JwtService {
     // Real World: Store this in AWS Secrets Manager or .env file
     private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
 
-    public String generateToken(String username) {
+    // Update arguments to accept ROLE
+    public String generateToken(String userName, String role) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        claims.put("role", role); // <--- THIS IS THE MISSING LINE!
+        return createToken(claims, userName);
     }
 
     private String createToken(Map<String, Object> claims, String subject) {

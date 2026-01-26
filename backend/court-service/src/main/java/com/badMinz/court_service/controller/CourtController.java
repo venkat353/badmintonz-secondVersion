@@ -13,6 +13,8 @@ import com.badMinz.court_service.dto.TimeslotRequest;
 import java.time.LocalDate;
 import java.security.Principal;
 
+import com.badMinz.court_service.dto.SlotGenerationRequest;
+
 @RestController
 @RequestMapping("/api/courts")
 @RequiredArgsConstructor
@@ -63,5 +65,22 @@ public class CourtController {
     public ResponseEntity<List<Timeslot>> getMyBookings(Principal principal) {
         // principal.getName() is the email from the Token
         return ResponseEntity.ok(courtService.getUserBookings(principal.getName()));
+    }
+
+    @PostMapping("/generate-slots")
+    public ResponseEntity<String> generateSlots(@RequestBody SlotGenerationRequest request) {
+        courtService.generateWeeklySlots(request);
+        return ResponseEntity.ok("Slots generated successfully!");
+    }
+
+    // ... inside CourtController ...
+
+    @PostMapping("/bookings/{id}/cancel")
+    public ResponseEntity<String> cancelBooking(
+            @PathVariable Long id,
+            Principal principal
+    ) {
+        courtService.cancelBooking(id, principal.getName());
+        return ResponseEntity.ok("Booking cancelled successfully");
     }
 }

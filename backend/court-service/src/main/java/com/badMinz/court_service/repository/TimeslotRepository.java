@@ -1,5 +1,5 @@
 package com.badMinz.court_service.repository;
-
+import com.badMinz.court_service.model.Court;
 import com.badMinz.court_service.model.Timeslot;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -18,4 +18,5 @@ public interface TimeslotRepository extends JpaRepository<Timeslot, Long> {
     List<Timeslot> findByCourtIdAndStartTimeBetween(Long courtId, LocalDateTime start, LocalDateTime end);
     // NEW: Find all slots booked by a specific email
     List<Timeslot> findByReservedBy(String email);
+    boolean existsByCourtAndStartTime(Court court, LocalDateTime startTime);
 }
