@@ -28,12 +28,17 @@ public class CourtController {
         return ResponseEntity.ok(courtService.createCourt(court));
     }
 
-    // GET /api/courts (List all active courts)
-    @GetMapping
-    public ResponseEntity<List<Court>> getAllCourts() {
-        return ResponseEntity.ok(courtService.getAllCourts());
-    }
 
+
+
+    // GET /api/courts?search=mars&surface=WOODEN
+    @GetMapping
+    public ResponseEntity<List<Court>> getAllCourts(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String surface
+    ) {
+        return ResponseEntity.ok(courtService.getAllCourts(search, surface));
+    }
     // GET /api/courts/{id} (Get single court)
     @GetMapping("/{id}")
     public ResponseEntity<Court> getCourt(@PathVariable Long id) {

@@ -27,7 +27,7 @@ const MyBookingsPage = () => {
       return;
     }
     try {
-      const response = await axios.get("http://13.203.21.23:8222/api/courts/my-bookings", {
+      const response = await axios.get("https://badmintoz.shop/api/courts/my-bookings", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setBookings(response.data);
@@ -52,7 +52,7 @@ const MyBookingsPage = () => {
     const token = localStorage.getItem("token");
 
     try {
-        await axios.post(`http://13.203.21.23:8222/api/courts/bookings/${slotId}/cancel`, {}, {
+        await axios.post(`https://badmintoz.shop/api/courts/bookings/${slotId}/cancel`, {}, {
             headers: { Authorization: `Bearer ${token}` }
         });
 

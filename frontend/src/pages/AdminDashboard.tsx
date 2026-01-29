@@ -32,7 +32,7 @@ const AdminDashboard = () => {
   });
 
   const token = localStorage.getItem('token');
-  const API_URL = "http://13.203.21.23:8222/api/courts";
+  const API_URL = "https://badmintoz.shop/api/courts";
 
   // 1. Fetch Courts on Load (so we can select them in the dropdown)
   useEffect(() => {

@@ -27,7 +27,7 @@ const SlotsPage = () => {
       try {
         // --- FIX 1: Use Gateway Port 8222 ---
         const response = await axios.get(
-          `http://13.203.21.23:8222/api/courts/${courtId}/timeslots?date=${date}`,
+          `https://badmintoz.shop/api/courts/${courtId}/timeslots?date=${date}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setSlots(response.data);
@@ -49,7 +49,7 @@ const SlotsPage = () => {
     try {
       // --- FIX: Added "/timeslots/" to match CourtController.java ---
       await axios.post(
-        `http://13.203.21.23:8222/api/courts/timeslots/${slotId}/book`,
+        `https://badmintoz.shop/api/courts/timeslots/${slotId}/book`,
         {}, // Empty body
         { headers: { Authorization: `Bearer ${token}` } }
       );

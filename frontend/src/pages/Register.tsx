@@ -28,7 +28,7 @@ export default function Register() {
 
     try {
       console.log("3. Sending request to backend...");
-      const response = await fetch('http://13.203.21.23:8222/api/auth/register', {
+      const response = await fetch('https://badmintoz.shop/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

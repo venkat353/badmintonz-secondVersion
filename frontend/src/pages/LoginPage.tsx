@@ -28,7 +28,7 @@ const LoginPage = () => {
 
     try {
       // 1. Send Request to AWS Gateway
-      const response = await axios.post("http://13.203.21.23:8222/api/auth/login", {
+      const response = await axios.post("https://badmintoz.shop/api/auth/login", {
         email: email,
         password: password
       });

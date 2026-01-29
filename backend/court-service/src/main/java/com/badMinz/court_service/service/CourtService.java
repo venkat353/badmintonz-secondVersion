@@ -1,6 +1,7 @@
 package com.badMinz.court_service.service;
 
 import com.badMinz.court_service.model.Court;
+import com.badMinz.court_service.model.SurfaceType;
 import com.badMinz.court_service.repository.CourtRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,9 +30,30 @@ public class CourtService {
         return courtRepository.save(court);
     }
 
-    public List<Court> getAllCourts() {
-        // Business Rule: Don't show deleted courts
-        return courtRepository.findByIsActiveTrue();
+//    public List<Court> getAllCourts() {
+//        // Business Rule: Don't show deleted courts
+//        return courtRepository.findByIsActiveTrue();
+//    }
+
+    // Updated method signature
+    public List<Court> getAllCourts(String search, String surface) {
+        SurfaceType surfaceType = null;
+
+        // Convert String to Enum safely
+        if (surface != null && !surface.isEmpty() && !surface.equals("ALL")) {
+            try {
+                surfaceType = SurfaceType.valueOf(surface);
+            } catch (IllegalArgumentException e) {
+                // Ignore invalid values, treat as null
+            }
+        }
+
+        // If both are empty, return everything (standard findAll)
+        if ((search == null || search.isEmpty()) && surfaceType == null) {
+            return courtRepository.findAll();
+        }
+
+        return courtRepository.searchCourts(search, surfaceType);
     }
 
     public Court getCourtById(Long id) {
