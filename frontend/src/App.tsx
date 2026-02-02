@@ -8,6 +8,7 @@ import MyBookingsPage from "./pages/MyBookingsPage";
 import AdminDashboard from './pages/AdminDashboard';
 import LandingPage from "./pages/LandingPage";
 import { AuthProvider, useAuth } from "./context/AuthContext"; 
+import ProfilePage from "./pages/ProfilePage";
 import type { JSX } from "react";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
@@ -66,6 +67,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <SlotsPage />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
               </ProtectedRoute>
             } 
           />

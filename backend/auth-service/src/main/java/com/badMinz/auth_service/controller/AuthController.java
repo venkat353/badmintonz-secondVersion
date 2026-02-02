@@ -47,6 +47,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.badMinz.auth_service.dto.LoginRequest;
 import com.badMinz.auth_service.dto.AuthResponse;
+import java.security.Principal;
+import com.badMinz.auth_service.dto.UpdateProfileRequest;
+import com.badMinz.auth_service.model.User;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -70,5 +73,20 @@ public class AuthController {
     @GetMapping("/demo")
     public ResponseEntity<String> sayHello() {
         return ResponseEntity.ok("Hello from secured endpoint!");
+    }
+
+    // GET: /api/auth/me
+    @GetMapping("/me")
+    public ResponseEntity<User> getCurrentUser(Principal principal) {
+        // 'Principal' automatically holds the logged-in user's email from the Token
+        User user = authService.getUserProfile(principal.getName());
+        return ResponseEntity.ok(user);
+    }
+
+    // PUT: /api/auth/me
+    @PutMapping("/me")
+    public ResponseEntity<User> updateCurrentUser(Principal principal, @RequestBody UpdateProfileRequest request) {
+        User updatedUser = authService.updateUserProfile(principal.getName(), request);
+        return ResponseEntity.ok(updatedUser);
     }
 }

@@ -7,44 +7,61 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-@Entity // 1. Tells Hibernate: "Make a table out of this class"
-@Table(name = "users") // 2. Best Practice: Table names should be plural and lowercase
-@Data // 3. Lombok: Auto-generates Getters, Setters, toString, etc.
-@Builder // 4. Design Pattern: Lets us build objects like User.builder().name("...").build()
-@NoArgsConstructor // Required by JPA
+@Entity
+@Table(name = "users")
+@Data
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor
-public class User implements UserDetails{
+public class User implements UserDetails {
 
-    @Id // Primary Key
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment (1, 2, 3...)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false) // SQL Constraint: NOT NULL
-    private String name;
+    @Column(nullable = false)
+    private String name; // This acts as your "Full Name"
 
-    @Column(unique = true, nullable = false) // SQL Constraint: UNIQUE and NOT NULL
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)
-    private String password; // This will be hashed (encrypted) later
+    private String password;
 
-    @Enumerated(EnumType.STRING) // Saves "ADMIN" as text "ADMIN", not number 0 or 1
+    @Enumerated(EnumType.STRING)
     private Role role;
 
-    @CreationTimestamp // Automatically sets time when row is created
+    // --- 🆕 NEW PROFILE FIELDS (Added & Organized) ---
+
+    private String phoneNumber;
+
+    private String city;
+
+    // Options: "Beginner", "Intermediate", "Advanced", "Pro"
+    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'Beginner'") // Sets DB default
+    private String skillLevel;
+
+    // Options: "Right", "Left"
+    private String playingHand;
+
+    @Column(length = 500) // Allows longer text for Bio
+    private String bio;
+
+    // --------------------------------------------------
+
+    @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp // Automatically updates time when row is modified
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     @Override
@@ -54,7 +71,7 @@ public class User implements UserDetails{
 
     @Override
     public String getUsername() {
-        return email; // We use email as username
+        return email;
     }
 
     @Override
@@ -66,4 +83,3 @@ public class User implements UserDetails{
     @Override
     public boolean isEnabled() { return true; }
 }
-
